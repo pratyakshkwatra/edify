@@ -1,1 +1,4 @@
-/venv
+venv/
+final_video.mp4
+recordings/
+.DS_Store
