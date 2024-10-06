@@ -34,6 +34,7 @@ Edify assists students in evaluating their current knowledge state against their
 
 ## Deployment
 Currently, Edify must be deployed locally on your machine.
+For this event, you can also access our model at: http://65.1.209.122/
 
 ## External Services
 Edify utilizes OpenAI's GPT-4 for its AI services. To use this functionality, you must add your `OPENAI_API_KEY` to the `.env` file.
