@@ -186,7 +186,7 @@
                 {% for url in top_searches %}
                 <a href="{{ url }}" target="_blank" style="text-decoration: none; color: inherit;">
                     <div class="link-item">
-                        <img src="{{ icons[loop.index0] }}" alt="Icon for {{ url }}">
+                        <img src="{{ icons[loop.index0] }}" onerror="this.src='{{ url_for('static', filename='logo.png') }}';">
                         <div class="link-content">
                             <p style="color: black; font-size: 1.2rem; text-decoration: none;">{{ titles[loop.index0] }}</p>
                             <p class="url-text">{{ url }}</p>
