@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='logo.png') }}">
+    <title>Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+            background: linear-gradient(to right, #e0f7fa, #ffffff);
+            color: #333;
+            text-align: center;
+            padding: 20px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #00796b;
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            transition: background-color 0.3s;
+        }
+
+        header:hover {
+            background-color: #004d40;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #ffeb3b;
+        }
+
+        .logout {
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .logout:hover {
+            transform: scale(1.1);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .stat-box {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            width: 30%;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-box h2 {
+            font-size: 3rem;
+            color: #00796b;
+            margin-bottom: 10px;
+        }
+
+        .stat-box p {
+            font-size: 1.2rem;
+            color: #555;
+        }
+
+        .tests-list {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        .tests-list h3 {
+            font-size: 1.8rem;
+            color: #00796b;
+            margin-bottom: 20px;
+        }
+
+        .test-item {
+            background-color: #e8f6f3;
+            position: relative;
+            padding: 15px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            border-radius: 24px;
+            text-align: left;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .test-item:hover {
+            background-color: #d1f2eb;
+            transform: scale(1.02);
+        }
+
+        .generate_result-button {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background-color: #004d40;
+            color: white;
+            padding: 10px 18px;
+            text-decoration: none;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .generate_result-button:hover {
+            background-color: #00796b;
+            transform: scale(1.05);
+        }
+
+        .test-item p {
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+
+        .no-tests {
+            font-size: 1.2rem;
+            color: #555;
+            padding: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1>Home Page</h1>
+            </div>
+            <nav>
+                <a href="/home" style="border-bottom: 2px solid white;">Home</a>
+                <a href="/create">Create</a>
+            </nav>
+            <div class="logout"><a href="/logout" style="color: white; text-decoration: none;">Logout</a></div>
+        </header>
+
+        <div class="stats">
+            <div class="stat-box">
+                <h2>{{ test_count }}</h2>
+                <p>Tests attempted</p>
+            </div>
+            <div class="stat-box">
+                <h2>{{ weak_count }}</h2>
+                <p>Weaknesses identified</p>
+            </div>
+            <div class="stat-box">
+                <h2>{{ strength_count }}</h2>
+                <p>Strengths recorded</p>
+            </div>
+        </div>
+
+        <div class="tests-list">
+            <h3>Created Tests</h3>
+            {% if created_tests %}
+            {% for test in created_tests %}
+            <div class="test-item">
+                <p><strong>Title:</strong> {{ test.title }}</p>
+                <p><strong>Date:</strong> {{ test.timestamp }}</p>
+                <p><strong>Questions:</strong> {{ test.question_count }}</p>
+                <p><strong>Score:</strong> {{ test.score }}</p>
+                {% if test.type == 0 %}
+                <form action="/onboarding_confirmation/{{ test.id }}" method="get">
+                    <button type="submit" class="generate_result-button">Attempt Test</button>
+                </form>
+                {% endif %}
+                {% if test.type == 1 %}
+                <form action="/generate_result/{{ test.id }}" method="get">
+                    <button type="submit" class="generate_result-button">Generate Result</button>
+                </form>
+                {% endif %}
+                {% if test.type == 2 %}
+                <form action="/view_report/{{ test.id }}" method="get">
+                    <button type="submit" class="generate_result-button">View Report</button>
+                </form>
+                {% endif %}
+            </div>
+            {% endfor %}
+            {% else %}
+            <p class="no-tests">No created tests yet. Start one today!</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>

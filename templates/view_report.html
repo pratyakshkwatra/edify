@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='logo.png') }}">
+    <title>Report View</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+            background: linear-gradient(to right, #e0f7fa, #ffffff);
+            color: #333;
+            padding: 20px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #00796b;
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            transition: background-color 0.3s;
+        }
+
+        header:hover {
+            background-color: #004d40;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #ffeb3b;
+        }
+
+        .logout {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .report-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            align-items: flex-start;
+        }
+
+        .left-section,
+        .right-section {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            width: 48%;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .left-section:hover,
+        .right-section:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .question-item {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+        }
+
+        .question-item:last-child {
+            border-bottom: none;
+        }
+
+        .question-item p {
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .strengths-weaknesses {
+            margin-top: 5px;
+        }
+
+        .strengths-weaknesses h3 {
+            font-size: 1.3rem;
+            color: #00796b;
+            margin-bottom: 10px;
+        }
+
+        .strengths-weaknesses ul {
+            list-style-type: disc;
+            margin-left: 40px;
+            font-size: 1.1rem;
+            color: #555;
+        }
+
+        button {
+            padding: 5px 10px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        button:hover {
+            background-color: #c0392b;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1>Report View</h1>
+            </div>
+            <nav>
+                <a href="/home">Home</a>
+                <a href="/create" style="border-bottom: 2px solid white;">Create</a>
+            </nav>
+            <div class="logout"><a href="/logout" style="color: white; text-decoration: none;">Logout</a></div>
+        </header>
+
+        <div class="report-container">
+            <div class="left-section">
+                <h2>Your Performance</h2>
+                {% if data_list %}
+                {% for item in data_list %}
+                <div class="question-item">
+                    <p><strong>Question:</strong> {{ item.question }}</p>
+                    <p style="display: inline-block; padding: 4px 10px; border-radius: 8px; background-color: rgba(173, 216, 230, 0.5); font-weight: bold;">
+                        <strong>Your Answer:</strong> {{ item.user_answer }}</p>
+                    <br>
+                    <p style="display: inline-block; padding: 4px 10px; border-radius: 8px; background-color: rgba(231, 249, 64, 0.5); font-weight: bold;">
+                        <strong>Score:</strong> {{ item.score }}
+                    </p>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p>No performance data available.</p>
+                {% endif %}
+            </div>
+
+            <div class="right-section">
+                <div class="strengths-weaknesses">
+                    <h3>Strengths</h3>
+                    {% if strengths %}
+                    <ul>
+                        {% for strength in strengths %}
+                        <li>{{ strength }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <ul>
+                        <li>Unfortunately, this time, your performance in all areas didn't quite meet our expectations.
+                            Let's work together to improve your understanding of these topics and strive for even better
+                            results.</li>
+                    </ul>
+                    {% endif %}
+                </div>
+                <br>
+                <div class="strengths-weaknesses">
+                    <h3>Weaknesses</h3>
+                    <ul>
+                        {% for weakness in weaknesses %}
+                        <li>
+                            {{ weakness.title }}
+                            <form action="/lets_improve/{{ test_id }}/{{ weakness.id }}" method="post" style="display:inline;">
+                                <button type="submit" style="margin-left: 8px;">Let's Improve</button>
+                            </form>
+                        </li>
+                        <div style="height: 10px;"></div>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

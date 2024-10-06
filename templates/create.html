@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='logo.png') }}">
+    <title>Create Test Plan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+            background: linear-gradient(to right, #e0f7fa, #ffffff);
+            color: #333;
+            text-align: center;
+            padding: 20px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #00796b;
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            transition: background-color 0.3s;
+        }
+
+        header:hover {
+            background-color: #004d40;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #ffeb3b;
+        }
+
+        .logout {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            margin: 0 auto;
+            margin-bottom: 40px;
+            transition: transform 0.3s;
+        }
+
+        form:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        label {
+            display: block;
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        select,
+        textarea,
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        select:focus,
+        textarea:focus,
+        input:focus {
+            border-color: #00796b;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 121, 107, 0.5);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s;
+        }
+
+        button:hover {
+            background-color: #004d40;
+            transform: scale(1.05);
+        }
+
+        button:focus {
+            outline: none;
+            box-shadow: 0 0 3px 2px rgba(0, 121, 107, 0.5);
+        }
+
+        img {
+            margin-bottom: 20px;
+            animation: bounce 1s infinite alternate;
+        }
+
+        @keyframes bounce {
+            from {
+                transform: translateY(0);
+            }
+            to {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1>Create Page</h1>
+            </div>
+            <nav>
+                <a href="/home">Home</a>
+                <a href="/create" style="border-bottom: 2px solid white;">Create</a>
+            </nav>
+            <div class="logout"><a href="/logout" style="color: white; text-decoration: none;">Logout</a></div>
+        </header>
+
+        <form action="/create" method="POST">
+            <img src="{{ url_for('static', filename='logo.png') }}" height="248px" width="248px" alt="">
+            <label for="grade-year">School Grade/College Year:</label>
+            <select id="grade-year" name="grade_year" required>
+                <option value="" disabled selected>Select your grade or year</option>
+                <option value="9th">9th</option>
+                <option value="10th">10th</option>
+                <option value="11th">11th</option>
+                <option value="12th">12th</option>
+                <option value="Year 1">Year 1</option>
+                <option value="Year 2">Year 2</option>
+                <option value="Year 3">Year 3</option>
+                <option value="Year 4">Year 4</option>
+            </select>
+
+            <label for="goal">Goal:</label>
+            <select id="goal" name="goal" required>
+                <option value="" disabled selected>Select your goal</option>
+                <option value="CBSE Board Exam">CBSE Board Exam</option>
+                <option value="JEE">JEE</option>
+                <option value="NEET">NEET</option>
+                <option value="NDA">NDA</option>
+                <option value="CDS">CDS</option>
+                <option value="College Mid Semester Exam">College Mid Semester Exam</option>
+                <option value="College End Semester Exam">College End Semester Exam</option>
+            </select>
+
+            <label for="subject">Subject to study:</label>
+            <textarea id="subject" name="subject" rows="1" placeholder="Enter subject to study" required></textarea>
+
+            <label for="chapters">Chapters to study:</label>
+            <textarea id="chapters" name="chapters" rows="4" placeholder="Enter chapters to study, separated by commas" required></textarea>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+
+</html>
