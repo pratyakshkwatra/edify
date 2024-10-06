@@ -609,7 +609,7 @@ def generate_result(test_id: int):
                                     session.commit()
                                     count += 1
 
-                        topic.score = correct_ques / total_ques
+                        topic.score = (correct_ques / total_ques) if (correct_ques != 0) else 0
                         session.commit()
 
                 onboarding_test.report_generated = True
